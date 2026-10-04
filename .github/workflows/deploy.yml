@@ -1,0 +1,21 @@
+name: Deploy Worker
+
+on:
+  push:
+    branches:
+      - main  # 监听 main 分支的提交
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      # 1. 拉取代码
+      - uses: actions/checkout@v4
+
+      # 2. 部署到 Cloudflare Workers
+      - name: Deploy with Wrangler
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # 如果 wrangler.toml 里没写 account_id，这里需要指定
